@@ -858,9 +858,9 @@ export default function AdminDashboard() {
           <button
             onClick={() => {
               if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(() => {});
+                document.documentElement.requestFullscreen().catch(() => { });
               } else {
-                document.exitFullscreen().catch(() => {});
+                document.exitFullscreen().catch(() => { });
               }
             }}
             className="p-1.5 hover:bg-white/10 rounded-lg transition text-white/90"
@@ -972,11 +972,10 @@ export default function AdminDashboard() {
             <div className="flex flex-col gap-2 w-full">
               <button
                 onClick={() => setClockedIn(!clockedIn)}
-                className={`px-5 py-1.5 rounded-full text-xs font-semibold shadow transition-all transform active:scale-95 ${
-                  clockedIn
+                className={`px-5 py-1.5 rounded-full text-xs font-semibold shadow transition-all transform active:scale-95 ${clockedIn
                     ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
                     : 'bg-[#80229a] hover:bg-[#68167f] text-white'
-                }`}
+                  }`}
               >
                 {clockedIn ? 'Clocked In ✓' : 'Clock In / Out'}
               </button>
@@ -1037,33 +1036,29 @@ export default function AdminDashboard() {
                         setOpenMenu(isOpen ? null : item.name);
                       }
                     }}
-                    className={`w-full rounded-2xl px-3 py-2 flex items-center justify-between shadow-sm cursor-pointer group transition duration-150 ${
-                      isOpen
+                    className={`w-full rounded-2xl px-3 py-2 flex items-center justify-between shadow-sm cursor-pointer group transition duration-150 ${isOpen
                         ? 'bg-[#80229a] text-white shadow-md'
                         : 'bg-white hover:bg-purple-50/80 text-slate-700 border border-slate-100/80'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-3">
                       <div
-                        className={`h-7 w-7 rounded-full flex items-center justify-center shrink-0 shadow-sm transition ${
-                          isOpen ? 'bg-[#f43f5e] text-white' : 'bg-[#80229a] text-white group-hover:bg-[#68167f]'
-                        }`}
+                        className={`h-7 w-7 rounded-full flex items-center justify-center shrink-0 shadow-sm transition ${isOpen ? 'bg-[#f43f5e] text-white' : 'bg-[#80229a] text-white group-hover:bg-[#68167f]'
+                          }`}
                       >
                         <Icon className="h-3.5 w-3.5" />
                       </div>
                       <span
-                        className={`text-xs font-semibold transition ${
-                          isOpen ? 'text-white font-bold' : 'text-slate-700 group-hover:text-[#80229a]'
-                        }`}
+                        className={`text-xs font-semibold transition ${isOpen ? 'text-white font-bold' : 'text-slate-700 group-hover:text-[#80229a]'
+                          }`}
                       >
                         {item.name}
                       </span>
                     </div>
                     {hasChildren ? (
                       <ChevronDown
-                        className={`h-3.5 w-3.5 transition-transform duration-200 ${
-                          isOpen ? 'rotate-180 text-white' : 'text-slate-400 group-hover:text-[#80229a]'
-                        }`}
+                        className={`h-3.5 w-3.5 transition-transform duration-200 ${isOpen ? 'rotate-180 text-white' : 'text-slate-400 group-hover:text-[#80229a]'
+                          }`}
                       />
                     ) : (
                       <ChevronRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-[#80229a] group-hover:translate-x-0.5 transition" />
@@ -1080,11 +1075,10 @@ export default function AdminDashboard() {
                           <button
                             key={child.id}
                             onClick={() => setActiveView(child.id)}
-                            className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-xs transition text-left cursor-pointer ${
-                              isChildActive
+                            className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-xs transition text-left cursor-pointer ${isChildActive
                                 ? 'bg-purple-100/90 text-[#80229a] font-bold shadow-xs'
                                 : 'text-slate-600 hover:text-[#80229a] hover:bg-purple-50'
-                            }`}
+                              }`}
                           >
                             <span className="text-[#80229a] font-bold text-sm leading-none">»</span>
                             <span className="font-medium transition">{child.label}</span>
@@ -1323,149 +1317,147 @@ export default function AdminDashboard() {
                   <div className="text-2xl font-bold text-slate-800 mt-2">0</div>
                 </div>
 
-            {/* Card 2: Today's Follow Up */}
-            <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col items-center justify-between min-h-[165px] hover:shadow-md transition">
-              <FollowUpIllustration />
-              <div className="bg-[#80229a] text-white text-[11px] font-semibold px-4 py-1 rounded-full shadow-sm mt-1">
-                Today&apos;s Follow Up
-              </div>
-              <div className="text-2xl font-bold text-slate-800 mt-2">0</div>
-            </div>
-
-            {/* Card 3: Student */}
-            <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col items-center justify-between min-h-[165px] hover:shadow-md transition">
-              <StudentIllustration />
-              <div className="bg-[#80229a] text-white text-[11px] font-semibold px-5 py-1 rounded-full shadow-sm mt-1">
-                Student
-              </div>
-              <div className="text-2xl font-bold text-slate-800 mt-2">{studentCount}</div>
-            </div>
-
-            {/* Card 4: Student Presence */}
-            <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col items-center justify-between min-h-[165px] relative hover:shadow-md transition">
-              {/* Green Today Badge */}
-              <div className="absolute top-2.5 right-2.5 bg-[#00c853] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
-                Today
-              </div>
-              <PresenceIllustration />
-              <div className="bg-[#80229a] text-white text-[11px] font-semibold px-4 py-1 rounded-full shadow-sm mt-1">
-                Student Presence
-              </div>
-              <div className="text-2xl font-bold text-slate-800 mt-2">3</div>
-            </div>
-
-            {/* Card 5: Monthly Fees */}
-            <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col items-center justify-between min-h-[165px] hover:shadow-md transition">
-              <FeesIllustration />
-              <div className="bg-[#80229a] text-white text-[11px] font-semibold px-4 py-1 rounded-full shadow-sm mt-1">
-                Monthly Fees
-              </div>
-              <div className="text-2xl font-bold text-slate-800 mt-2">709000</div>
-            </div>
-          </div>
-
-          {/* 4. Metric Cards Grid (Row 2 - 3 Cards + Upcoming Birthday Widget) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {/* Card 6: Income / Expense */}
-            <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col items-center justify-between min-h-[165px] relative hover:shadow-md transition">
-              <div className="absolute top-2.5 right-2.5 bg-[#00c853] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
-                Monthly
-              </div>
-              <IncomeExpenseIllustration />
-              <div className="bg-[#80229a] text-white text-[11px] font-semibold px-4 py-1 rounded-full shadow-sm mt-1">
-                Income / Expense
-              </div>
-              <div className="text-2xl font-bold text-slate-800 mt-2">0 / 0</div>
-            </div>
-
-            {/* Card 7: Staff */}
-            <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col items-center justify-between min-h-[165px] hover:shadow-md transition">
-              <StaffIllustration />
-              <div className="bg-[#80229a] text-white text-[11px] font-semibold px-6 py-1 rounded-full shadow-sm mt-1">
-                Staff
-              </div>
-              <div className="text-2xl font-bold text-slate-800 mt-2">48</div>
-            </div>
-
-            {/* Card 8: Staff Presence */}
-            <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col items-center justify-between min-h-[165px] relative hover:shadow-md transition">
-              <div className="absolute top-2.5 right-2.5 bg-[#00c853] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
-                Today
-              </div>
-              <StaffPresenceIllustration />
-              <div className="bg-[#80229a] text-white text-[11px] font-semibold px-4 py-1 rounded-full shadow-sm mt-1">
-                Staff Presence
-              </div>
-              <div className="text-2xl font-bold text-slate-800 mt-2">36</div>
-            </div>
-
-            {/* Card 9: Upcoming Birthday Card (Spans 2 columns) */}
-            <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 lg:col-span-2 flex flex-col justify-between min-h-[165px] relative hover:shadow-md transition">
-              {/* Yellow Upcoming Pill Badge */}
-              <div className="absolute top-3 right-3 bg-[#fbc02d] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">
-                Upcoming
-              </div>
-
-              {/* Title & Tabs */}
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-lg">🎂</span>
-                  <h4 className="font-bold text-slate-800 text-sm tracking-tight">Upcoming Birthday</h4>
+                {/* Card 2: Today's Follow Up */}
+                <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col items-center justify-between min-h-[165px] hover:shadow-md transition">
+                  <FollowUpIllustration />
+                  <div className="bg-[#80229a] text-white text-[11px] font-semibold px-4 py-1 rounded-full shadow-sm mt-1">
+                    Today&apos;s Follow Up
+                  </div>
+                  <div className="text-2xl font-bold text-slate-800 mt-2">0</div>
                 </div>
 
-                <div className="flex border-b border-slate-100 pb-1 mb-3 text-xs font-semibold gap-6">
-                  <button
-                    onClick={() => setBirthdayTab('student')}
-                    className={`transition pb-1 relative ${
-                      birthdayTab === 'student'
-                        ? 'text-[#80229a] border-b-2 border-[#80229a]'
-                        : 'text-slate-400 hover:text-slate-600'
-                    }`}
-                  >
+                {/* Card 3: Student */}
+                <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col items-center justify-between min-h-[165px] hover:shadow-md transition">
+                  <StudentIllustration />
+                  <div className="bg-[#80229a] text-white text-[11px] font-semibold px-5 py-1 rounded-full shadow-sm mt-1">
                     Student
-                  </button>
-                  <button
-                    onClick={() => setBirthdayTab('staff')}
-                    className={`transition pb-1 relative ${
-                      birthdayTab === 'staff'
-                        ? 'text-[#80229a] border-b-2 border-[#80229a]'
-                        : 'text-slate-400 hover:text-slate-600'
-                    }`}
-                  >
+                  </div>
+                  <div className="text-2xl font-bold text-slate-800 mt-2">{studentCount}</div>
+                </div>
+
+                {/* Card 4: Student Presence */}
+                <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col items-center justify-between min-h-[165px] relative hover:shadow-md transition">
+                  {/* Green Today Badge */}
+                  <div className="absolute top-2.5 right-2.5 bg-[#00c853] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                    Today
+                  </div>
+                  <PresenceIllustration />
+                  <div className="bg-[#80229a] text-white text-[11px] font-semibold px-4 py-1 rounded-full shadow-sm mt-1">
+                    Student Presence
+                  </div>
+                  <div className="text-2xl font-bold text-slate-800 mt-2">3</div>
+                </div>
+
+                {/* Card 5: Monthly Fees */}
+                <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col items-center justify-between min-h-[165px] hover:shadow-md transition">
+                  <FeesIllustration />
+                  <div className="bg-[#80229a] text-white text-[11px] font-semibold px-4 py-1 rounded-full shadow-sm mt-1">
+                    Monthly Fees
+                  </div>
+                  <div className="text-2xl font-bold text-slate-800 mt-2">709000</div>
+                </div>
+              </div>
+
+              {/* 4. Metric Cards Grid (Row 2 - 3 Cards + Upcoming Birthday Widget) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                {/* Card 6: Income / Expense */}
+                <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col items-center justify-between min-h-[165px] relative hover:shadow-md transition">
+                  <div className="absolute top-2.5 right-2.5 bg-[#00c853] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                    Monthly
+                  </div>
+                  <IncomeExpenseIllustration />
+                  <div className="bg-[#80229a] text-white text-[11px] font-semibold px-4 py-1 rounded-full shadow-sm mt-1">
+                    Income / Expense
+                  </div>
+                  <div className="text-2xl font-bold text-slate-800 mt-2">0 / 0</div>
+                </div>
+
+                {/* Card 7: Staff */}
+                <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col items-center justify-between min-h-[165px] hover:shadow-md transition">
+                  <StaffIllustration />
+                  <div className="bg-[#80229a] text-white text-[11px] font-semibold px-6 py-1 rounded-full shadow-sm mt-1">
                     Staff
-                  </button>
+                  </div>
+                  <div className="text-2xl font-bold text-slate-800 mt-2">48</div>
                 </div>
 
-                {/* Birthday List */}
-                <div className="space-y-2.5">
-                  {(birthdayTab === 'student' ? studentBirthdays : staffBirthdays).map((item, idx) => (
-                    <div key={idx} className="flex items-center justify-between py-1 border-b border-slate-50 last:border-0">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`h-7 w-7 rounded-full flex items-center justify-center text-[10px] font-bold ${item.avatarBg}`}
-                        >
-                          {item.initials}
-                        </div>
-                        <div>
-                          <p className="text-xs font-bold text-[#80229a] tracking-tight">{item.name}</p>
-                          <p className="text-[10px] text-slate-400">{item.date}</p>
-                        </div>
-                      </div>
-                      <span className="text-[11px] text-slate-400 font-medium">🎂 Birthday</span>
+                {/* Card 8: Staff Presence */}
+                <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col items-center justify-between min-h-[165px] relative hover:shadow-md transition">
+                  <div className="absolute top-2.5 right-2.5 bg-[#00c853] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                    Today
+                  </div>
+                  <StaffPresenceIllustration />
+                  <div className="bg-[#80229a] text-white text-[11px] font-semibold px-4 py-1 rounded-full shadow-sm mt-1">
+                    Staff Presence
+                  </div>
+                  <div className="text-2xl font-bold text-slate-800 mt-2">36</div>
+                </div>
+
+                {/* Card 9: Upcoming Birthday Card (Spans 2 columns) */}
+                <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 lg:col-span-2 flex flex-col justify-between min-h-[165px] relative hover:shadow-md transition">
+                  {/* Yellow Upcoming Pill Badge */}
+                  <div className="absolute top-3 right-3 bg-[#fbc02d] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">
+                    Upcoming
+                  </div>
+
+                  {/* Title & Tabs */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-lg">🎂</span>
+                      <h4 className="font-bold text-slate-800 text-sm tracking-tight">Upcoming Birthday</h4>
                     </div>
-                  ))}
+
+                    <div className="flex border-b border-slate-100 pb-1 mb-3 text-xs font-semibold gap-6">
+                      <button
+                        onClick={() => setBirthdayTab('student')}
+                        className={`transition pb-1 relative ${birthdayTab === 'student'
+                            ? 'text-[#80229a] border-b-2 border-[#80229a]'
+                            : 'text-slate-400 hover:text-slate-600'
+                          }`}
+                      >
+                        Student
+                      </button>
+                      <button
+                        onClick={() => setBirthdayTab('staff')}
+                        className={`transition pb-1 relative ${birthdayTab === 'staff'
+                            ? 'text-[#80229a] border-b-2 border-[#80229a]'
+                            : 'text-slate-400 hover:text-slate-600'
+                          }`}
+                      >
+                        Staff
+                      </button>
+                    </div>
+
+                    {/* Birthday List */}
+                    <div className="space-y-2.5">
+                      {(birthdayTab === 'student' ? studentBirthdays : staffBirthdays).map((item, idx) => (
+                        <div key={idx} className="flex items-center justify-between py-1 border-b border-slate-50 last:border-0">
+                          <div className="flex items-center gap-3">
+                            <div
+                              className={`h-7 w-7 rounded-full flex items-center justify-center text-[10px] font-bold ${item.avatarBg}`}
+                            >
+                              {item.initials}
+                            </div>
+                            <div>
+                              <p className="text-xs font-bold text-[#80229a] tracking-tight">{item.name}</p>
+                              <p className="text-[10px] text-slate-400">{item.date}</p>
+                            </div>
+                          </div>
+                          <span className="text-[11px] text-slate-400 font-medium">🎂 Birthday</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Footer notice */}
+                  <div className="mt-2 pt-2 border-t border-slate-100 text-[10px] text-slate-400 text-right">
+                    Next 7 Days Notifications Active
+                  </div>
                 </div>
               </div>
-
-              {/* Footer notice */}
-              <div className="mt-2 pt-2 border-t border-slate-100 text-[10px] text-slate-400 text-right">
-                Next 7 Days Notifications Active
-              </div>
-            </div>
-          </div>
-        </>
-      )}
-    </main>
+            </>
+          )}
+        </main>
       </div>
     </div>
   );
