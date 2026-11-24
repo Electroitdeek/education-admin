@@ -799,7 +799,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#80229a] flex flex-col font-sans select-none">
+    <div className="h-screen max-h-screen bg-[#80229a] flex flex-col font-sans select-none overflow-hidden">
       {/* ============================================================== */}
       {/* TOP APP HEADER BAR */}
       {/* ============================================================== */}
@@ -938,7 +938,7 @@ export default function AdminDashboard() {
         {/* ============================================================ */}
         {/* LEFT SIDEBAR */}
         {/* ============================================================ */}
-        <aside className="w-60 md:w-64 p-3 flex flex-col gap-3 overflow-y-auto shrink-0 scrollbar-thin">
+        <aside className="w-64 md:w-72 p-3 flex flex-col gap-3 h-full overflow-y-auto shrink-0 scrollbar-thin">
           {/* Super Admin Profile Card */}
           <div className="bg-white rounded-2xl p-4 shadow-md text-center flex flex-col items-center">
             {/* Operator Avatar */}
@@ -1005,26 +1005,15 @@ export default function AdminDashboard() {
                   {/* Parent Menu Item */}
                   <button
                     onClick={() => {
-                      if (item.name === 'Front Office') {
-                        setActiveView('dashboard');
-                        setOpenMenu(isOpen && activeView === 'dashboard' ? null : 'Front Office');
-                      } else if (item.name === 'Fees Collection') {
-                        setActiveView('collect-fee');
-                        setOpenMenu(isOpen && activeView === 'collect-fee' ? null : 'Fees Collection');
-                      } else if (item.name === 'Attendance') {
-                        setActiveView('student-attendance');
-                        setOpenMenu(isOpen && activeView === 'student-attendance' ? null : 'Attendance');
-                      } else if (item.name === 'Academics') {
-                        setActiveView('class-timetable');
-                        setOpenMenu(isOpen && activeView === 'class-timetable' ? null : 'Academics');
-                      } else if (item.name === 'Examinations') {
-                        setActiveView('term-list');
-                        setOpenMenu(isOpen && activeView === 'term-list' ? null : 'Examinations');
-                      } else if (item.name === 'Online Exam') {
-                        setActiveView('online-exam');
-                        setOpenMenu(isOpen && activeView === 'online-exam' ? null : 'Online Exam');
+                      if (isOpen) {
+                        setOpenMenu(null);
                       } else {
-                        setOpenMenu(isOpen ? null : item.name);
+                        setOpenMenu(item.name);
+                        if (item.name === 'Front Office') {
+                          setActiveView('dashboard');
+                        } else if (item.children.length > 0) {
+                          setActiveView(item.children[0].id);
+                        }
                       }
                     }}
                     className={`w-full rounded-2xl px-3 py-2 flex items-center justify-between shadow-sm cursor-pointer group transition duration-150 ${isOpen
@@ -1066,14 +1055,14 @@ export default function AdminDashboard() {
                           <button
                             key={child.id}
                             onClick={() => setActiveView(child.id)}
-                            className={`w-full flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs transition text-left cursor-pointer ${
+                            className={`w-full flex items-start gap-2 px-3 py-2 rounded-xl text-xs transition text-left cursor-pointer ${
                               isChildActive
                                 ? 'bg-[#ede9fe] text-[#80229a] font-bold shadow-xs'
                                 : 'text-slate-600 hover:text-[#80229a] hover:bg-purple-50/70 font-medium'
                             }`}
                           >
-                            <span className="text-[#80229a] font-bold text-xs leading-none">›</span>
-                            <span className="truncate">{child.label}</span>
+                            <span className="text-[#80229a] font-bold text-xs leading-none mt-0.5">›</span>
+                            <span className="leading-snug">{child.label}</span>
                           </button>
                         );
                       })}
