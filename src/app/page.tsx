@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 import AdmissionEnquiryView from '@/components/front-office/AdmissionEnquiryView';
 import VisitorsView from '@/components/front-office/VisitorsView';
 import PostalDispatchView from '@/components/front-office/PostalDispatchView';
@@ -98,7 +97,6 @@ import {
   CalendarCheck,
   RotateCw,
   Clock,
-  Cake,
   Users,
   FileText,
   BookOpen,
@@ -106,7 +104,6 @@ import {
   Bus,
   Bed,
   Settings,
-  UserCheck,
   Laptop,
   Video,
   FileSpreadsheet,
@@ -1013,19 +1010,7 @@ export default function AdminDashboard() {
               const hasChildren = item.children.length > 0;
               const isOpen = openMenu === item.name;
 
-              if (!authChecked) {
-    return (
-      <div className="min-h-screen bg-[#80229a] flex items-center justify-center text-white text-sm font-semibold">
-        Verifying session...
-      </div>
-    );
-  }
-
-  if (!adminUser) {
-    return <AdminLoginView onLoginSuccess={(user) => setAdminUser(user)} />;
-  }
-
-  return (
+              return (
                 <div key={idx}>
                   {/* Parent Menu Item */}
                   <button
@@ -1090,19 +1075,8 @@ export default function AdminDashboard() {
                     <div className="mt-1 ml-3 pl-3 border-l-2 border-purple-200 flex flex-col gap-0.5">
                       {item.children.map((child) => {
                         const isChildActive = activeView === child.id;
-                        if (!authChecked) {
-    return (
-      <div className="min-h-screen bg-[#80229a] flex items-center justify-center text-white text-sm font-semibold">
-        Verifying session...
-      </div>
-    );
-  }
 
-  if (!adminUser) {
-    return <AdminLoginView onLoginSuccess={(user) => setAdminUser(user)} />;
-  }
-
-  return (
+                        return (
                           <button
                             key={child.id}
                             onClick={() => setActiveView(child.id)}
@@ -1195,8 +1169,10 @@ export default function AdminDashboard() {
             <BatchView onNavigate={setActiveView} />
           ) : activeView === 'student-referral' ? (
             <StudentReferralView onNavigate={setActiveView} />
-          ) : activeView === 'inactive-students' || activeView === 'disabled-students' ? (
+          ) : activeView === 'inactive-students' ? (
             <InactiveStudentsView onNavigate={setActiveView} />
+          ) : activeView === 'disabled-students' ? (
+            <DisabledStudentsView onNavigate={setActiveView} />
           ) : activeView === 'link-siblings' ? (
             <LinkSiblingsView onNavigate={setActiveView} />
           ) : activeView === 'student-update' ? (
