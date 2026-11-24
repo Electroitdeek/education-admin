@@ -1280,14 +1280,7 @@ export default function AdminDashboard() {
             </div>
           ) : (
             <>
-              {/* 1. ERP Validity Warning Banner */}
-              <div className="bg-[#fbbf24] border border-amber-400/80 rounded-xl px-5 py-3 shadow-sm text-center">
-                <p className="text-white font-medium text-xs md:text-sm drop-shadow-sm">
-                  The Validity of this ERP is going to be Expired Soon, Please Renew it before the Validity Expires to get Uninterrupted Services.!
-                </p>
-              </div>
-
-              {/* 2. Refresh Dashboard Bar */}
+              {/* 1. Refresh Dashboard Bar */}
               <div className="flex justify-end items-center">
                 <div className="flex flex-col items-end">
                   <button
