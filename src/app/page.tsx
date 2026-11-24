@@ -1067,7 +1067,7 @@ export default function AdminDashboard() {
 
                   {/* Dropdown Sub-items */}
                   {hasChildren && isOpen && (
-                    <div className="bg-white rounded-2xl p-2 mt-1.5 shadow-lg border border-purple-100 flex flex-col gap-1 transition-all">
+                    <div className="bg-white rounded-2xl p-1.5 mt-1 border border-purple-100 shadow-sm flex flex-col gap-0.5 transition-all">
                       {item.children.map((child) => {
                         const isChildActive = activeView === child.id;
 
@@ -1075,15 +1075,13 @@ export default function AdminDashboard() {
                           <button
                             key={child.id}
                             onClick={() => setActiveView(child.id)}
-                            className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs transition text-left cursor-pointer ${
+                            className={`w-full flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs transition text-left cursor-pointer ${
                               isChildActive
-                                ? 'bg-[#80229a] text-white font-bold shadow-sm'
-                                : 'text-slate-700 hover:text-[#80229a] hover:bg-purple-50 font-medium'
+                                ? 'bg-[#ede9fe] text-[#80229a] font-bold shadow-xs'
+                                : 'text-slate-600 hover:text-[#80229a] hover:bg-purple-50/70 font-medium'
                             }`}
                           >
-                            <span className={isChildActive ? 'text-amber-300 font-bold text-xs' : 'text-[#80229a] font-bold text-xs'}>
-                              ›
-                            </span>
+                            <span className="text-[#80229a] font-bold text-xs leading-none">›</span>
                             <span className="truncate">{child.label}</span>
                           </button>
                         );
@@ -1460,6 +1458,11 @@ export default function AdminDashboard() {
               </div>
             </>
           )}
+
+          {/* ERP System Footer */}
+          <footer className="pt-6 pb-2 text-center text-xs text-slate-400 font-medium select-none">
+            Copyright © 2026 NLET. All rights reserved. Version (5.6)
+          </footer>
         </main>
       </div>
     </div>
