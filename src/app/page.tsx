@@ -1067,7 +1067,7 @@ export default function AdminDashboard() {
 
                   {/* Dropdown Sub-items */}
                   {hasChildren && isOpen && (
-                    <div className="mt-1 ml-3 pl-3 border-l-2 border-purple-200 flex flex-col gap-0.5">
+                    <div className="bg-white rounded-2xl p-2 mt-1.5 shadow-lg border border-purple-100 flex flex-col gap-1 transition-all">
                       {item.children.map((child) => {
                         const isChildActive = activeView === child.id;
 
@@ -1075,13 +1075,16 @@ export default function AdminDashboard() {
                           <button
                             key={child.id}
                             onClick={() => setActiveView(child.id)}
-                            className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-xs transition text-left cursor-pointer ${isChildActive
-                                ? 'bg-purple-100/90 text-[#80229a] font-bold shadow-xs'
-                                : 'text-slate-600 hover:text-[#80229a] hover:bg-purple-50'
-                              }`}
+                            className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs transition text-left cursor-pointer ${
+                              isChildActive
+                                ? 'bg-[#80229a] text-white font-bold shadow-sm'
+                                : 'text-slate-700 hover:text-[#80229a] hover:bg-purple-50 font-medium'
+                            }`}
                           >
-                            <span className="text-[#80229a] font-bold text-sm leading-none">»</span>
-                            <span className="font-medium transition">{child.label}</span>
+                            <span className={isChildActive ? 'text-amber-300 font-bold text-xs' : 'text-[#80229a] font-bold text-xs'}>
+                              ›
+                            </span>
+                            <span className="truncate">{child.label}</span>
                           </button>
                         );
                       })}
