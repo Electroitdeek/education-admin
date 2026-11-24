@@ -969,25 +969,16 @@ export default function AdminDashboard() {
             <h3 className="font-bold text-slate-800 text-sm">{adminUser.name}</h3>
             <p className="text-[11px] text-slate-500 mb-3 capitalize">{adminUser.role}</p>
 
-            <div className="flex flex-col gap-2 w-full">
-              <button
-                onClick={() => setClockedIn(!clockedIn)}
-                className={`px-5 py-1.5 rounded-full text-xs font-semibold shadow transition-all transform active:scale-95 ${clockedIn
-                    ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                    : 'bg-[#80229a] hover:bg-[#68167f] text-white'
-                  }`}
-              >
-                {clockedIn ? 'Clocked In ✓' : 'Clock In / Out'}
-              </button>
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="px-4 py-1.5 rounded-full text-xs font-semibold border border-rose-200 text-rose-600 hover:bg-rose-50 flex items-center justify-center gap-1.5 transition"
-              >
-                <LogOut className="h-3.5 w-3.5" />
-                Log Out
-              </button>
-            </div>
+            <button
+              onClick={() => setClockedIn(!clockedIn)}
+              className={`px-5 py-1.5 rounded-full text-xs font-semibold shadow transition-all transform active:scale-95 ${
+                clockedIn
+                  ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                  : 'bg-[#80229a] hover:bg-[#68167f] text-white'
+              }`}
+            >
+              {clockedIn ? 'Clocked In ✓' : 'Clock In / Out'}
+            </button>
           </div>
 
           {/* Search Menu Input */}
