@@ -77,6 +77,8 @@ import { BATCH2_VIEW_IDS, Batch2ViewRenderer } from '@/components/batch2/Batch2V
 import { BATCH3_VIEW_IDS, Batch3ViewRenderer } from '@/components/batch3/Batch3Views';
 import { BATCH4_VIEW_IDS, Batch4ViewRenderer } from '@/components/batch4/Batch4Views';
 import { BATCH5_VIEW_IDS, Batch5ViewRenderer } from '@/components/batch5/Batch5Views';
+import RolesPermissionView from '@/components/system-setting/RolesPermissionView';
+import { hasPermission } from '@/lib/permissions';
 import AdminLoginView, { AdminUser } from '@/components/auth/AdminLoginView';
 import { API_BASE } from '@/components/shared/ErpCrudView';
 import {
@@ -745,10 +747,49 @@ export default function AdminDashboard() {
     },
   ];
 
-  const filteredMenu = menuItems.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.children.some((c) => c.label.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const MENU_MODULE_MAP: Record<string, string> = {
+    'Front Office': 'front-office',
+    'Fees Collection': 'fees-collection',
+    'Income': 'income',
+    'Expense': 'expense',
+    'Student Info': 'student-info',
+    'Attendance': 'attendance',
+    'Academics': 'academics',
+    'Examinations': 'examinations',
+    'Online Exam': 'online-exam',
+    'Online Class': 'online-class',
+    'Question Paper': 'question-paper',
+    'Other Programs': 'other-programs',
+    'Download Center': 'download-center',
+    'Lesson Planner': 'lesson-planner',
+    'Assignment': 'assignment',
+    'Communicate': 'communicate',
+    'Human Resource': 'human-resource',
+    'Inventory': 'inventory',
+    'Library': 'library',
+    'Transport': 'transport',
+    'Hostel': 'hostel',
+    'Certificate': 'certificate',
+    'Consent Letter': 'consent-letter',
+    'Digital Notice Board': 'digital-notice-board',
+    'Student Wallet': 'student-wallet',
+    'Bank Info': 'bank-info',
+    'Report': 'reports',
+    'Front CMS': 'front-cms',
+    'Subscription': 'subscription',
+    'System Setting': 'system-setting',
+  };
+
+  const filteredMenu = menuItems.filter((item) => {
+    const modKey = MENU_MODULE_MAP[item.name];
+    if (modKey && !hasPermission(adminUser, modKey, 'view')) {
+      return false;
+    }
+    return (
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.children.some((c) => c.label.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+  });
 
   const studentBirthdays = [
     {
@@ -1228,6 +1269,8 @@ export default function AdminDashboard() {
             <Batch3ViewRenderer activeView={activeView} />
           ) : (BATCH4_VIEW_IDS as readonly string[]).includes(activeView) ? (
             <Batch4ViewRenderer activeView={activeView} />
+          ) : activeView === 'set-roles' ? (
+            <RolesPermissionView onNavigate={setActiveView} />
           ) : (BATCH5_VIEW_IDS as readonly string[]).includes(activeView) ? (
             <Batch5ViewRenderer activeView={activeView} />
           ) : activeView !== 'dashboard' ? (

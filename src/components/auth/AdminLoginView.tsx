@@ -3,12 +3,14 @@
 import React, { useState } from 'react';
 import { Lock, Mail, Eye, EyeOff, LogIn, AlertCircle, ShieldCheck } from 'lucide-react';
 import { API_BASE } from '@/components/shared/ErpCrudView';
+import type { ModulePermission } from '@/components/system-setting/RolesPermissionView';
 
 export interface AdminUser {
   id: string;
   name: string;
   email: string;
   role: string;
+  permissions?: ModulePermission[];
 }
 
 interface AdminLoginViewProps {
