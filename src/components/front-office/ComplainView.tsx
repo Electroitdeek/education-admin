@@ -160,10 +160,12 @@ export default function ComplainView({
   const fetchRecords = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(ENDPOINT);
-      if (res.ok) {
-        const data = await res.json();
+      const res = await fetch(ENDPOINT).catch(() => null);
+      if (res && res.ok) {
+        const data = await res.json().catch(() => []);
         setRecords(Array.isArray(data) ? data : []);
+      } else {
+        setRecords([]);
       }
     } catch {
       // API offline
@@ -247,7 +249,11 @@ export default function ComplainView({
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
-      });
+      }).catch(() => null);
+
+      if (!res) {
+        throw new Error('Backend API server on port 5000 is not reachable.');
+      }
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));

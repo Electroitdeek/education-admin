@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import ClientErrorHandler from "@/components/ClientErrorHandler";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +29,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-screen flex flex-col bg-[#80229a] text-slate-800 font-sans selection:bg-[#9c27b0] selection:text-white">
+        <ClientErrorHandler />
         {children}
       </body>
     </html>

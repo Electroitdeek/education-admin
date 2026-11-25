@@ -142,10 +142,12 @@ export default function VisitorsView({
   const fetchRecords = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(ENDPOINT);
-      if (res.ok) {
-        const data = await res.json();
+      const res = await fetch(ENDPOINT).catch(() => null);
+      if (res && res.ok) {
+        const data = await res.json().catch(() => []);
         setRecords(Array.isArray(data) ? data : []);
+      } else {
+        setRecords([]);
       }
     } catch {
       // API offline
@@ -185,7 +187,11 @@ export default function VisitorsView({
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
-      });
+      }).catch(() => null);
+
+      if (!res) {
+        throw new Error('Backend API server on port 5000 is not reachable.');
+      }
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
@@ -286,8 +292,8 @@ export default function VisitorsView({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ids: selectedIds }),
-      });
-      if (res.ok) {
+      }).catch(() => null);
+      if (res && res.ok) {
         setSelectedIds([]);
         fetchRecords();
       }

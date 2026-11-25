@@ -128,10 +128,12 @@ export default function AdmissionEnquiryView({
       if (params?.followUpDate) qs.set('followUpDate', params.followUpDate);
       if (params?.enquiryDateFrom) qs.set('enquiryDateFrom', params.enquiryDateFrom);
       if (params?.enquiryDateTo) qs.set('enquiryDateTo', params.enquiryDateTo);
-      const res = await fetch(`${ENDPOINT}?${qs.toString()}`);
-      if (res.ok) {
-        const data = await res.json();
+      const res = await fetch(`${ENDPOINT}?${qs.toString()}`).catch(() => null);
+      if (res && res.ok) {
+        const data = await res.json().catch(() => []);
         setRecords(Array.isArray(data) ? data : []);
+      } else {
+        setRecords([]);
       }
     } catch {
       // API offline
@@ -216,7 +218,10 @@ export default function AdmissionEnquiryView({
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
-      });
+      }).catch(() => null);
+      if (!res) {
+        throw new Error('Backend API server on port 5000 is not reachable. Please ensure the backend is started.');
+      }
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error((err as { message?: string }).message || 'Failed to save');
@@ -237,7 +242,7 @@ export default function AdmissionEnquiryView({
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this enquiry record?')) return;
-    await fetch(`${ENDPOINT}/${id}`, { method: 'DELETE' });
+    await fetch(`${ENDPOINT}/${id}`, { method: 'DELETE' }).catch(() => null);
     fetchRecords({
       source: filterSource,
       status: filterStatus,

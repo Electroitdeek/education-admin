@@ -73,10 +73,12 @@ export default function SetupFrontOfficeView({
   const fetchItems = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${ENDPOINT}?type=${activeTab}`);
-      if (res.ok) {
-        const data = await res.json();
+      const res = await fetch(`${ENDPOINT}?type=${activeTab}`).catch(() => null);
+      if (res && res.ok) {
+        const data = await res.json().catch(() => []);
         setItems(Array.isArray(data) ? data : []);
+      } else {
+        setItems([]);
       }
     } catch {
       // API error or offline
@@ -132,7 +134,11 @@ export default function SetupFrontOfficeView({
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
-      });
+      }).catch(() => null);
+
+      if (!res) {
+        throw new Error('Backend API server on port 5000 is not reachable.');
+      }
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
@@ -173,8 +179,8 @@ export default function SetupFrontOfficeView({
   const handleDelete = async (id: string) => {
     if (!confirm(`Are you sure you want to delete this ${currentTab.singular}?`)) return;
     try {
-      const res = await fetch(`${ENDPOINT}/${id}`, { method: 'DELETE' });
-      if (res.ok) {
+      const res = await fetch(`${ENDPOINT}/${id}`, { method: 'DELETE' }).catch(() => null);
+      if (res && res.ok) {
         fetchItems();
         if (editingId === id) handleCancel();
       }
