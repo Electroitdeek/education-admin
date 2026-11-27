@@ -16,7 +16,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3045';
 const ENDPOINT = `${API}/fees-collection/fee-group`;
 
 export interface FeeGroupRecord {
@@ -94,7 +94,7 @@ export default function FeeGroupView({
         showAlert('Failed to load fee groups', 'error');
       }
     } catch {
-      showAlert('Could not connect to API server on port 5000', 'error');
+      showAlert('Could not connect to API server on port 3045', 'error');
     } finally {
       setLoading(false);
     }

@@ -345,7 +345,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchApiData = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3045';
         const res = await fetch(`${apiUrl}/users`);
         if (res.ok) {
           const data = await res.json();

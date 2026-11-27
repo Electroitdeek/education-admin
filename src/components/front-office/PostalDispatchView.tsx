@@ -17,7 +17,7 @@ import {
   FileText,
 } from 'lucide-react';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3045';
 const ENDPOINT = `${API}/front-office/postal-dispatch`;
 
 export interface PostalDispatchRecord {
@@ -151,7 +151,7 @@ export default function PostalDispatchView({
       }).catch(() => null);
 
       if (!res) {
-        throw new Error('Backend API server on port 5000 is not reachable.');
+        throw new Error('Backend API server on port 3045 is not reachable.');
       }
 
       if (!res.ok) {

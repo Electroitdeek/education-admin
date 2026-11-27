@@ -18,7 +18,7 @@ import {
   Eye,
 } from 'lucide-react';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3045';
 const ENDPOINT = `${API}/front-office/admission-enquiry`;
 
 export interface AdmissionEnquiry {
@@ -220,7 +220,7 @@ export default function AdmissionEnquiryView({
         body: JSON.stringify(form),
       }).catch(() => null);
       if (!res) {
-        throw new Error('Backend API server on port 5000 is not reachable. Please ensure the backend is started.');
+        throw new Error('Backend API server on port 3045 is not reachable. Please ensure the backend is started.');
       }
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));

@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { IncomeItem, IncomeHeadItem } from './AddIncomeView';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3045';
 const ENDPOINT = `${API}/income`;
 
 interface Props {

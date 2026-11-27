@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { StudentItem } from './StudentDetailsView';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3045';
 const ENDPOINT = `${API}/student-info/students`;
 
 interface Props {

@@ -14,7 +14,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 
-export const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+export const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3045';
 
 export interface FieldDef {
   name: string;

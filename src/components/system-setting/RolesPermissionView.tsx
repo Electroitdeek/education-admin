@@ -248,7 +248,7 @@ export default function RolesPermissionView({}: RolesPermissionViewProps) {
       }).catch(() => null);
 
       if (!res) {
-        throw new Error('API server unreachable on port 5000.');
+        throw new Error('API server unreachable on port 3045.');
       }
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));

@@ -34,7 +34,7 @@ import {
   FileCheck2,
 } from 'lucide-react';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3045';
 const ENDPOINT = `${API}/student-info/students`;
 
 export interface StudentItem {

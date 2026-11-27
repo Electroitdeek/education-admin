@@ -16,7 +16,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3045';
 const ENDPOINT = `${API}/front-office/gate-pass`;
 
 export interface GatePassRecord {
@@ -189,7 +189,7 @@ export default function GatePassView({
       }).catch(() => null);
 
       if (!res) {
-        throw new Error('Backend API server on port 5000 is not reachable.');
+        throw new Error('Backend API server on port 3045 is not reachable.');
       }
 
       if (!res.ok) {

@@ -18,7 +18,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3045';
 const MASTER_ENDPOINT = `${API}/fees-collection/fee-master`;
 const TYPES_ENDPOINT = `${API}/fees-collection/fee-master/fee-types`;
 
@@ -154,7 +154,7 @@ export default function FeeMasterView({
         showAlert('Failed to load fee masters', 'error');
       }
     } catch {
-      showAlert('Could not connect to API server on port 5000', 'error');
+      showAlert('Could not connect to API server on port 3045', 'error');
     } finally {
       setLoading(false);
     }
