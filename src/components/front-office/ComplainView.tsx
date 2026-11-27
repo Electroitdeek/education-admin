@@ -91,6 +91,7 @@ export default function ComplainView({
   // View mode: 'list' | 'add_edit'
   const [viewMode, setViewMode] = useState<'list' | 'add_edit'>('list');
   const [editingRecord, setEditingRecord] = useState<ComplainRecord | null>(null);
+  const [complainTypes, setComplainTypes] = useState<string[]>(COMPLAIN_TYPES);
 
   // Form State matching Add & Edit screen
   const [form, setForm] = useState<Partial<ComplainRecord>>({
@@ -175,6 +176,16 @@ export default function ComplainView({
 
   useEffect(() => {
     fetchRecords();
+    // Load dynamic complain types from Front Office Setup
+    fetch(`${API}/front-office/front-office-setup?type=complain_type`)
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          const names = data.map((d: { name: string }) => d.name).filter(Boolean);
+          if (names.length > 0) setComplainTypes(names);
+        }
+      })
+      .catch(() => {});
   }, [fetchRecords]);
 
   // Open Add Screen
@@ -446,7 +457,7 @@ export default function ComplainView({
                     className="w-full px-3.5 py-2.5 text-xs border border-purple-300 focus:border-[#80229a] focus:ring-1 focus:ring-[#80229a]/20 rounded-xl bg-purple-50/20 text-slate-700 outline-none transition appearance-none cursor-pointer"
                   >
                     <option value="">Select</option>
-                    {COMPLAIN_TYPES.map((t) => (
+                    {complainTypes.map((t) => (
                       <option key={t} value={t}>
                         {t}
                       </option>
