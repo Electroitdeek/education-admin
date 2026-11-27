@@ -128,25 +128,39 @@ export default function AdmissionEnquiryView({
       if (params?.followUpDate) qs.set('followUpDate', params.followUpDate);
       if (params?.enquiryDateFrom) qs.set('enquiryDateFrom', params.enquiryDateFrom);
       if (params?.enquiryDateTo) qs.set('enquiryDateTo', params.enquiryDateTo);
-      const res = await fetch(`${ENDPOINT}?${qs.toString()}`).catch(() => null);
+      const queryString = qs.toString();
+      const url = queryString ? `${ENDPOINT}?${queryString}` : ENDPOINT;
+      const res = await fetch(url).catch((err) => {
+        console.warn('API connection failed:', err);
+        return null;
+      });
       if (res && res.ok) {
         const data = await res.json().catch(() => []);
         setRecords(Array.isArray(data) ? data : []);
       } else {
         setRecords([]);
       }
-    } catch {
-      // API offline
+    } catch (err) {
+      console.warn('AdmissionEnquiryView fetchRecords error:', err);
+      setRecords([]);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   useEffect(() => {
-    if (filterDateFrom && filterDateTo) {
-      fetchRecords({ enquiryDateFrom: filterDateFrom, enquiryDateTo: filterDateTo });
-    } else {
-      fetchRecords();
-    }
+    const load = async () => {
+      try {
+        if (filterDateFrom && filterDateTo) {
+          await fetchRecords({ enquiryDateFrom: filterDateFrom, enquiryDateTo: filterDateTo });
+        } else {
+          await fetchRecords();
+        }
+      } catch (err) {
+        console.warn('AdmissionEnquiryView load error:', err);
+      }
+    };
+    load();
   }, [fetchRecords, filterDateFrom, filterDateTo]);
 
   // Close column menu on outside click
