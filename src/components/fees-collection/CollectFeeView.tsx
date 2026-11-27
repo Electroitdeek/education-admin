@@ -137,6 +137,10 @@ export default function CollectFeeView({
   const [page, setPage] = useState<number>(1);
   const pageSize = 10;
 
+  // Receipt Modal State
+  const [receiptData, setReceiptData] = useState<FeeRecord | null>(null);
+  const [showReceiptModal, setShowReceiptModal] = useState<boolean>(false);
+
   // Initialize payment date
   useEffect(() => {
     const today = new Date().toISOString().slice(0, 10);
@@ -241,6 +245,8 @@ export default function CollectFeeView({
       setSuccessToast(`₹${collectAmount.toLocaleString()} collected successfully for ${selectedRecord.studentName}! Receipt: ${updated.receiptNo}`);
       setTimeout(() => setSuccessToast(''), 5000);
       setShowCollectModal(false);
+      setReceiptData(updated);
+      setShowReceiptModal(true);
       fetchRecords({ course: selectedCourse, semester: selectedSemester, keyword });
     } catch (err: unknown) {
       setModalError((err as Error).message);
@@ -572,19 +578,35 @@ export default function CollectFeeView({
                       {renderStatus(r.status)}
                     </td>
                     <td className="px-4 py-3 text-right pr-6 whitespace-nowrap">
-                      {r.balance > 0 ? (
-                        <button
-                          onClick={() => openCollect(r)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#80229a] hover:bg-[#68167f] text-white text-xs font-semibold rounded-lg shadow-sm transition active:scale-95 cursor-pointer"
-                        >
-                          <HandCoins className="h-3.5 w-3.5" />
-                          Collect Fees
-                        </button>
-                      ) : (
-                        <span className="text-xs text-emerald-600 font-semibold px-2 py-1 bg-emerald-50 rounded-lg">
-                          ✓ Completed
-                        </span>
-                      )}
+                      <div className="flex items-center justify-end gap-1.5">
+                        {(r.paidFees > 0 || r.receiptNo) && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setReceiptData(r);
+                              setShowReceiptModal(true);
+                            }}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-lg border border-emerald-200 transition cursor-pointer"
+                            title="View & Print Official Receipt"
+                          >
+                            <Printer className="h-3.5 w-3.5 text-emerald-600" />
+                            Receipt
+                          </button>
+                        )}
+                        {r.balance > 0 ? (
+                          <button
+                            onClick={() => openCollect(r)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#80229a] hover:bg-[#68167f] text-white text-xs font-semibold rounded-lg shadow-sm transition active:scale-95 cursor-pointer"
+                          >
+                            <HandCoins className="h-3.5 w-3.5" />
+                            Collect Fees
+                          </button>
+                        ) : (
+                          <span className="text-xs text-emerald-600 font-semibold px-2 py-1 bg-emerald-50 rounded-lg">
+                            ✓ Completed
+                          </span>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -890,6 +912,115 @@ export default function CollectFeeView({
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/* OFFICIAL FEE RECEIPT MODAL                                  */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {showReceiptModal && receiptData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-[#80229a] to-[#601575] px-6 py-4 text-white flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                  <CheckCircle2 className="h-5 w-5 text-emerald-300" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm md:text-base leading-tight">Fee Payment Receipt</h3>
+                  <p className="text-[11px] text-purple-200">Official Student Payment Acknowledgment</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowReceiptModal(false)}
+                className="text-white/70 hover:text-white p-1 rounded-lg hover:bg-white/10 transition"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Receipt Body */}
+            <div className="p-6 space-y-4 text-xs text-slate-700">
+              <div className="text-center pb-3 border-b border-dashed border-slate-200">
+                <h4 className="text-sm font-bold text-slate-800 tracking-wide uppercase">
+                  Gangapur Institute of Nursing & Paramedical Sciences
+                </h4>
+                <p className="text-[11px] text-slate-500">Affiliated to RUHS & Rajasthan Nursing Council</p>
+                <div className="inline-block mt-2 px-3.5 py-1 bg-purple-50 text-[#80229a] border border-purple-200 rounded-full font-mono font-bold text-xs">
+                  RECEIPT NO: {receiptData.receiptNo || 'RCP-GENERATED'}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                <div>
+                  <span className="text-[10px] uppercase font-semibold text-slate-400 block">Student Name</span>
+                  <span className="font-bold text-slate-800">{receiptData.studentName}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] uppercase font-semibold text-slate-400 block">Admission No</span>
+                  <span className="font-mono text-slate-800 font-semibold">{receiptData.admissionNo}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] uppercase font-semibold text-slate-400 block">Course & Year</span>
+                  <span className="font-medium text-slate-800">{receiptData.course} ({receiptData.semester})</span>
+                </div>
+                <div>
+                  <span className="text-[10px] uppercase font-semibold text-slate-400 block">Payment Date</span>
+                  <span className="font-medium text-slate-800">{receiptData.paymentDate || 'Today'}</span>
+                </div>
+              </div>
+
+              {/* Amount Breakdown */}
+              <div className="space-y-1.5 pt-1">
+                <div className="flex justify-between py-1 border-b border-slate-100">
+                  <span className="text-slate-500">Total Course Fee:</span>
+                  <span className="font-semibold text-slate-700">₹{Number(receiptData.totalFees).toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between py-1 border-b border-slate-100 bg-emerald-50/60 px-2 rounded">
+                  <span className="font-bold text-emerald-800">Total Amount Paid:</span>
+                  <span className="font-bold text-emerald-700 text-sm">₹{Number(receiptData.paidFees).toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between py-1 border-b border-slate-100">
+                  <span className="text-slate-500">Payment Mode:</span>
+                  <span className="font-semibold text-slate-800 uppercase">{receiptData.paymentMode || 'Cash'}</span>
+                </div>
+                <div className="flex justify-between py-1 border-b border-slate-100">
+                  <span className="text-slate-500">Remaining Balance:</span>
+                  <span className="font-bold text-rose-600">₹{Number(receiptData.balance).toLocaleString()}</span>
+                </div>
+                {receiptData.note && (
+                  <div className="flex justify-between py-1 text-slate-500 italic">
+                    <span>Note / Remarks:</span>
+                    <span>{receiptData.note}</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="text-center text-[10px] text-slate-400 pt-2 border-t border-slate-100">
+                Official computer-generated fee acknowledgment receipt. Gangapur City, Rajasthan.
+              </div>
+            </div>
+
+            {/* Modal Actions */}
+            <div className="px-6 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-2.5">
+              <button
+                type="button"
+                onClick={() => setShowReceiptModal(false)}
+                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-200/60 rounded-xl transition cursor-pointer"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#80229a] hover:bg-[#68167f] rounded-xl shadow-sm transition active:scale-95 cursor-pointer"
+              >
+                <Printer className="h-4 w-4" />
+                Print Receipt
+              </button>
+            </div>
           </div>
         </div>
       )}
