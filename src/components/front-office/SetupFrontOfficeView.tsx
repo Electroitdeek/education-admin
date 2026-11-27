@@ -100,12 +100,17 @@ export default function SetupFrontOfficeView({
 
   // Close action menus when clicking outside
   useEffect(() => {
-    const handleGlobalClick = () => {
-      setOpenActionId(null);
-      setShowColMenu(false);
+    const handleGlobalClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.action-menu-container')) {
+        setOpenActionId(null);
+      }
+      if (!target.closest('.col-menu-container')) {
+        setShowColMenu(false);
+      }
     };
-    document.addEventListener('click', handleGlobalClick);
-    return () => document.removeEventListener('click', handleGlobalClick);
+    document.addEventListener('mousedown', handleGlobalClick);
+    return () => document.removeEventListener('mousedown', handleGlobalClick);
   }, []);
 
   // Save (Create or Update)
@@ -405,18 +410,19 @@ export default function SetupFrontOfficeView({
               </button>
 
               {/* Column Visibility dropdown */}
-              <div className="relative" onClick={(e) => e.stopPropagation()}>
+              <div className="relative col-menu-container">
                 <button
+                  type="button"
                   onClick={() => setShowColMenu(!showColMenu)}
                   className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-white bg-[#80229a] hover:bg-[#68167f] rounded-lg shadow-sm transition cursor-pointer"
                 >
                   <Eye className="h-3.5 w-3.5" />
                   Column visibility
-                  <ChevronDown className="h-3 w-3" />
+                  <ChevronDown className={`h-3 w-3 transition-transform ${showColMenu ? 'rotate-180' : ''}`} />
                 </button>
 
                 {showColMenu && (
-                  <div className="absolute left-0 mt-1 w-44 bg-white border border-slate-200 rounded-xl shadow-xl z-30 p-2 space-y-1">
+                  <div className="absolute left-0 top-full mt-1 w-44 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
                     <label className="flex items-center gap-2 px-2 py-1 text-xs text-slate-700 hover:bg-purple-50 rounded cursor-pointer">
                       <input
                         type="checkbox"
@@ -485,7 +491,7 @@ export default function SetupFrontOfficeView({
                     </td>
                   </tr>
                 ) : (
-                  paginatedItems.map((item) => (
+                  paginatedItems.map((item, idx) => (
                     <tr key={item._id} className="hover:bg-purple-50/30 transition">
                       <td className="px-4 py-3 font-medium text-slate-800">
                         {item.name}
@@ -496,34 +502,48 @@ export default function SetupFrontOfficeView({
                         </td>
                       )}
                       <td className="px-4 py-3 text-right pr-6 relative">
-                        <div
-                          className="inline-block"
-                          onClick={(e) => e.stopPropagation()}
-                        >
+                        <div className="relative inline-block text-left action-menu-container">
                           <button
-                            onClick={() =>
-                              setOpenActionId(openActionId === item._id ? null : item._id!)
-                            }
-                            className="inline-flex items-center gap-1 px-3 py-1 bg-[#80229a] hover:bg-[#68167f] text-white text-xs font-semibold rounded-lg shadow-sm transition cursor-pointer"
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setOpenActionId((prev) => (prev === item._id ? null : (item._id ?? null)));
+                            }}
+                            className="inline-flex items-center gap-1 px-3 py-1 bg-[#80229a] hover:bg-[#68167f] text-white text-xs font-semibold rounded-lg shadow-sm transition cursor-pointer select-none"
                           >
                             Action
-                            <ChevronDown className="h-3 w-3" />
+                            <ChevronDown className={`h-3 w-3 transition-transform ${openActionId === item._id ? 'rotate-180' : ''}`} />
                           </button>
 
                           {openActionId === item._id && (
-                            <div className="absolute right-6 mt-1 w-28 bg-white border border-slate-200 rounded-xl shadow-xl z-30 py-1 text-left">
+                            <div
+                              className={`absolute right-0 ${
+                                idx >= paginatedItems.length - 2 && paginatedItems.length > 2
+                                  ? 'bottom-full mb-1'
+                                  : 'top-full mt-1'
+                              } w-32 bg-white border border-slate-200 rounded-xl shadow-2xl z-50 py-1.5 text-left`}
+                              onClick={(e) => e.stopPropagation()}
+                            >
                               <button
-                                onClick={() => handleEdit(item)}
+                                type="button"
+                                onClick={() => {
+                                  setOpenActionId(null);
+                                  handleEdit(item);
+                                }}
                                 className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-slate-700 hover:bg-purple-50 hover:text-[#80229a] transition cursor-pointer"
                               >
-                                <Edit2 className="h-3 w-3 text-blue-500" />
+                                <Edit2 className="h-3.5 w-3.5 text-blue-500" />
                                 Edit
                               </button>
                               <button
-                                onClick={() => handleDelete(item._id!)}
+                                type="button"
+                                onClick={() => {
+                                  setOpenActionId(null);
+                                  handleDelete(item._id!);
+                                }}
                                 className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-red-600 hover:bg-red-50 transition cursor-pointer"
                               >
-                                <Trash2 className="h-3 w-3 text-red-500" />
+                                <Trash2 className="h-3.5 w-3.5 text-red-500" />
                                 Delete
                               </button>
                             </div>
