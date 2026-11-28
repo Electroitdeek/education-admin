@@ -72,10 +72,10 @@ export default function AdminLoginView({ onLoginSuccess }: AdminLoginViewProps) 
             </svg>
           </div>
           <h1 className="text-lg font-bold tracking-wide uppercase">
-            GINOPAS ERP
+            EINOPAS ERP
           </h1>
           <p className="text-xs text-purple-100 mt-1">
-            Gangapur Institute of Nursing and Paramedical Sciences
+            Electro Institute of Nursing and Paramedical Sciences
           </p>
         </div>
 

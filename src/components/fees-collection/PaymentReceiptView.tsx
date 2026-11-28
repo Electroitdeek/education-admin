@@ -899,7 +899,7 @@ export default function PaymentReceiptView({
             <div className="p-6 space-y-4 text-xs text-slate-700" id="receipt-print-area">
               <div className="text-center border-b border-slate-100 pb-3">
                 <h3 className="font-bold text-sm uppercase text-[#80229a]">
-                  GANGAPUR INSTITUTE OF NURSING AND PARAMEDICAL SCIENCES
+                  ELECTRO INSTITUTE OF NURSING AND PARAMEDICAL SCIENCES
                 </h3>
                 <p className="text-[11px] text-slate-400">Official Student Fee Payment Receipt</p>
               </div>

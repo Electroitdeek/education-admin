@@ -27,6 +27,26 @@ import {
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3045';
 const ENDPOINT = `${API}/income`;
 
+function toYYYYMMDD(val: string): string {
+  if (!val) return '';
+  if (/^\d{4}-\d{2}-\d{2}$/.test(val)) return val;
+  const parts = val.split('-');
+  if (parts.length === 3 && parts[2].length === 4) {
+    return `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+  }
+  return val;
+}
+
+function toDDMMYYYY(val: string): string {
+  if (!val) return '';
+  if (/^\d{2}-\d{2}-\d{4}$/.test(val)) return val;
+  const parts = val.split('-');
+  if (parts.length === 3 && parts[0].length === 4) {
+    return `${parts[2]}-${parts[1]}-${parts[0]}`;
+  }
+  return val;
+}
+
 export interface IncomeItem {
   _id: string;
   incomeHead: string;
@@ -548,12 +568,12 @@ export default function AddIncomeView({ onNavigate }: Props) {
                 Date <span className="text-rose-500">*</span>
               </label>
               <input
-                type="text"
+                type="date"
                 required
-                placeholder="DD-MM-YYYY"
-                value={formData.date}
-                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-[#80229a]"
+                value={toYYYYMMDD(formData.date)}
+                onChange={(e) => setFormData({ ...formData, date: toDDMMYYYY(e.target.value) })}
+                onClick={(e) => (e.currentTarget as any).showPicker?.()}
+                className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-[#80229a] bg-white cursor-pointer"
               />
             </div>
 
@@ -880,7 +900,7 @@ export default function AddIncomeView({ onNavigate }: Props) {
             <div className="p-6 space-y-4">
               <div className="text-center pb-3 border-b border-slate-100">
                 <h2 className="text-sm font-extrabold text-[#80229a] uppercase tracking-wide">
-                  Gangapur Institute of Nursing and Paramedical Sciences
+                  Electro Institute of Nursing and Paramedical Sciences
                 </h2>
                 <p className="text-[10px] text-slate-500">
                   Campus Institutional Revenue & Accounts Division

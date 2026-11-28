@@ -172,6 +172,12 @@ export default function AdmitCardView({ onNavigate }: Props) {
     }
   };
 
+  useEffect(() => {
+    if (selectedTerm && selectedExam && selectedCourse && selectedSemester) {
+      handleSearch();
+    }
+  }, [selectedTerm, selectedExam, selectedCourse, selectedSemester]);
+
   return (
     <div className="space-y-5">
       {toast && (

@@ -601,7 +601,7 @@ function buildDownloadFields(fixedCategory?: string): FieldDef[] {
     courseField(true),
     semesterField(true),
     { name: 'subject', label: 'Subject', required: false },
-    { name: 'uploadDate', label: 'Upload Date', type: 'date', required: false },
+    { name: 'uploadDate', label: 'Upload Date', type: 'date', defaultValue: new Date().toISOString().split('T')[0], required: false },
     { name: 'fileUrl', label: 'File / Video URL', type: 'url', placeholder: 'https://...', required: false },
     { name: 'uploadedBy', label: 'Uploaded By', required: false },
     { name: 'description', label: 'Description', type: 'textarea', required: false },
@@ -936,7 +936,7 @@ export function Batch1ViewRenderer({ activeView }: { activeView: string }) {
             { key: 'parameter', label: 'Parameter' },
             { key: 'score', label: 'Score' },
             { key: 'maxScore', label: 'Max Score' },
-            { key: 'assessmentDate', label: 'Date' },
+            { key: 'assessmentDate', label: 'Date', render: (r: any) => r.assessmentDate || r.date || '-' },
           ]}
         />
       );

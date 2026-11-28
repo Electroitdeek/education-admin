@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "GANGAPUR INSTITUTE OF NURSING AND PARAMEDICAL SCIENCES - Admin Dashboard",
-  description: "GINOPAS ERP College & Admin Management System",
+  title: "ELECTRO INSTITUTE OF NURSING AND PARAMEDICAL SCIENCES - Admin Dashboard",
+  description: "EINOPAS ERP College & Admin Management System",
 };
 
 export default function RootLayout({

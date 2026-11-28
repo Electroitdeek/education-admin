@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Calendar,
   GraduationCap,
@@ -44,18 +44,28 @@ const SEMESTERS = [
 
 const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+function toYYYYMMDD(val: string): string {
+  if (!val) return new Date().toISOString().split('T')[0];
+  if (/^\d{4}-\d{2}-\d{2}$/.test(val)) return val;
+  const parts = val.split('-');
+  if (parts.length === 3 && parts[2].length === 4) {
+    return `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+  }
+  return val;
+}
+
 interface Props {
   onNavigate?: (view: string) => void;
 }
 
 export default function DailyTimetableView({ onNavigate }: Props) {
-  const [course, setCourse] = useState('');
-  const [semester, setSemester] = useState('');
-  const [dateStr, setDateStr] = useState('17-10-2026');
+  const [course, setCourse] = useState('B.Sc. Nursing');
+  const [semester, setSemester] = useState('Semester 1');
+  const [dateStr, setDateStr] = useState(new Date().toISOString().split('T')[0]);
 
   const [slots, setSlots] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false);
+  const [hasSearched, setHasSearched] = useState(true);
   const [modeLabel, setModeLabel] = useState('');
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
@@ -64,8 +74,9 @@ export default function DailyTimetableView({ onNavigate }: Props) {
     setTimeout(() => setToast(null), 3500);
   };
 
-  const getWeekday = (ddmmyyyy: string): string => {
-    const parts = ddmmyyyy.split('-');
+  const getWeekday = (dateInput: string): string => {
+    if (!dateInput) return 'Monday';
+    const parts = dateInput.split('-');
     if (parts.length === 3) {
       const d =
         parts[0].length === 4
@@ -77,25 +88,23 @@ export default function DailyTimetableView({ onNavigate }: Props) {
   };
 
   const fetchDaily = useCallback(
-    async (allCoursesMode: boolean) => {
-      if (!allCoursesMode && (!course || !semester)) {
-        showToast('error', 'Please select Course and Semester (or click All Course Timetable).');
-        return;
-      }
+    async (allCoursesMode: boolean, cOverride?: string, sOverride?: string) => {
+      const c = cOverride !== undefined ? cOverride : course;
+      const s = sOverride !== undefined ? sOverride : semester;
       setLoading(true);
       setHasSearched(true);
       const dayName = getWeekday(dateStr);
       setModeLabel(
         allCoursesMode
           ? `All Courses — ${dateStr} (${dayName})`
-          : `${course} (${semester}) — ${dateStr} (${dayName})`
+          : `${c || 'All Courses'} ${s ? `(${s})` : ''} — ${dateStr} (${dayName})`
       );
 
       try {
         const params = new URLSearchParams();
         if (!allCoursesMode) {
-          params.set('course', course);
-          params.set('semester', semester);
+          if (c && c !== 'Select Course') params.set('course', c);
+          if (s && s !== 'Select Semester') params.set('semester', s);
         }
         // Filter by weekday when available; if Sunday, fallback to all
         if (dayName !== 'Sunday') {
@@ -114,6 +123,11 @@ export default function DailyTimetableView({ onNavigate }: Props) {
     },
     [course, semester, dateStr]
   );
+
+  // Initial load
+  useEffect(() => {
+    fetchDaily(false, 'B.Sc. Nursing', 'Semester 1');
+  }, []);
 
   const handleExportCsv = () => {
     if (!slots.length) {
@@ -249,11 +263,11 @@ export default function DailyTimetableView({ onNavigate }: Props) {
                   Date <span className="text-rose-500">*</span>
                 </label>
                 <input
-                  type="text"
-                  value={dateStr}
+                  type="date"
+                  value={toYYYYMMDD(dateStr)}
                   onChange={(e) => setDateStr(e.target.value)}
-                  placeholder="17-10-2026"
-                  className="w-full h-10 px-3 text-sm bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#80229a]/30 focus:border-[#80229a] text-gray-700"
+                  onClick={(e) => (e.currentTarget as any).showPicker?.()}
+                  className="w-full h-10 px-3 text-sm bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#80229a]/30 focus:border-[#80229a] text-gray-700 cursor-pointer shadow-xs"
                 />
               </div>
             </div>

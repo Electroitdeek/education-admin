@@ -85,9 +85,9 @@ interface Props {
 }
 
 export default function ClassTimetableView({ onNavigate }: Props) {
-  const [courseFilter, setCourseFilter] = useState('');
-  const [semesterFilter, setSemesterFilter] = useState('');
-  const [hasSearched, setHasSearched] = useState(false);
+  const [courseFilter, setCourseFilter] = useState('B.Sc. Nursing');
+  const [semesterFilter, setSemesterFilter] = useState('Semester 1');
+  const [hasSearched, setHasSearched] = useState(true);
   const [activeDay, setActiveDay] = useState<string>('All');
 
   const [slots, setSlots] = useState<TimetableSlot[]>([]);
@@ -123,13 +123,15 @@ export default function ClassTimetableView({ onNavigate }: Props) {
       .catch(() => {});
   }, []);
 
-  const fetchTimetable = useCallback(async () => {
+  const fetchTimetable = useCallback(async (courseOverride?: string, semesterOverride?: string) => {
     setLoading(true);
     setHasSearched(true);
     try {
+      const c = courseOverride !== undefined ? courseOverride : courseFilter;
+      const s = semesterOverride !== undefined ? semesterOverride : semesterFilter;
       const params = new URLSearchParams();
-      if (courseFilter) params.set('course', courseFilter);
-      if (semesterFilter) params.set('semester', semesterFilter);
+      if (c && c !== 'Select Course') params.set('course', c);
+      if (s && s !== 'Select Semester') params.set('semester', s);
 
       const res = await fetch(`${API}/academics/timetable?${params.toString()}`);
       if (!res.ok) throw new Error('Failed to fetch timetable');
@@ -142,13 +144,20 @@ export default function ClassTimetableView({ onNavigate }: Props) {
     }
   }, [courseFilter, semesterFilter]);
 
+  // Initial load: Fetch B.Sc. Nursing Semester 1 by default
+  useEffect(() => {
+    fetchTimetable('B.Sc. Nursing', 'Semester 1');
+  }, []);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!courseFilter || !semesterFilter) {
-      showToast('error', 'Please select both Course and Semester.');
-      return;
-    }
     fetchTimetable();
+  };
+
+  const handleReset = () => {
+    setCourseFilter('');
+    setSemesterFilter('');
+    fetchTimetable('', '');
   };
 
   const handleOpenAddModal = () => {
@@ -288,7 +297,16 @@ export default function ClassTimetableView({ onNavigate }: Props) {
               </div>
             </div>
 
-            <div className="flex justify-end">
+            <div className="flex justify-end items-center gap-2">
+              {(courseFilter || semesterFilter) && (
+                <button
+                  type="button"
+                  onClick={handleReset}
+                  className="inline-flex items-center gap-1 px-3 py-2 rounded-md border border-gray-300 hover:bg-gray-100 text-gray-700 text-xs font-medium transition cursor-pointer"
+                >
+                  Show All
+                </button>
+              )}
               <button
                 type="submit"
                 disabled={loading}
@@ -311,7 +329,7 @@ export default function ClassTimetableView({ onNavigate }: Props) {
             <div className="px-6 py-4 border-b border-gray-100 flex flex-wrap items-center justify-between gap-3">
               <div>
                 <h2 className="text-sm font-bold text-gray-800">
-                  Class Timetable — {courseFilter} ({semesterFilter})
+                  Class Timetable — {courseFilter || 'All Courses'} {semesterFilter ? `(${semesterFilter})` : ''}
                 </h2>
                 <p className="text-xs text-gray-500 mt-0.5">
                   {slots.length} scheduled lecture/clinical slot{slots.length === 1 ? '' : 's'}

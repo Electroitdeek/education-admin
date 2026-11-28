@@ -707,6 +707,7 @@ function StudentWalletView() {
   const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null);
 
   const [txForm, setTxForm] = useState({
+    accountId: '',
     admissionNo: '',
     studentName: '',
     type: 'Credit' as 'Credit' | 'Debit',
@@ -723,6 +724,7 @@ function StudentWalletView() {
 
   const openTxModal = (type: 'Credit' | 'Debit', row?: any) => {
     setTxForm({
+      accountId: row?._id || '',
       admissionNo: row?.admissionNo || '',
       studentName: row?.studentName || '',
       type,

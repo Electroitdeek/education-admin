@@ -33,8 +33,8 @@ export default function SearchIncomeView({ onNavigate }: Props) {
 
   // Criteria Filters matching Screenshot media_1793694746346_89c14c8e.jpg
   const [incomeHead, setIncomeHead] = useState('');
-  const [dateFrom, setDateFrom] = useState('17-10-2026');
-  const [dateTo, setDateTo] = useState('17-10-2026');
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
   const [searchByIncome, setSearchByIncome] = useState('');
 
   // Table search & column visibility
@@ -88,6 +88,18 @@ export default function SearchIncomeView({ onNavigate }: Props) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleResetCriteria = () => {
+    setIncomeHead('');
+    setDateFrom('');
+    setDateTo('');
+    setLoading(true);
+    fetch(ENDPOINT)
+      .then((res) => res.json())
+      .then((data) => setItems(data.items || []))
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
   };
 
   // Search by Keyword (Search by Income)
@@ -215,37 +227,68 @@ export default function SearchIncomeView({ onNavigate }: Props) {
                 </select>
               </div>
 
-              {/* Date Form (Exact label from Reference Screenshot) */}
+              {/* Date From (Interactive Date Picker) */}
               <div>
-                <label className="block font-semibold text-slate-600 mb-1.5">
-                  Date Form
-                </label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block font-semibold text-slate-600 text-xs">
+                    Date From
+                  </label>
+                  {dateFrom && (
+                    <button
+                      type="button"
+                      onClick={() => setDateFrom('')}
+                      className="text-[10px] text-purple-600 hover:text-rose-500 font-semibold"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
                 <input
-                  type="text"
-                  placeholder="17-10-2026"
+                  type="date"
                   value={dateFrom}
                   onChange={(e) => setDateFrom(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-[#80229a] text-xs bg-slate-50 font-mono"
+                  onClick={(e) => (e.currentTarget as any).showPicker?.()}
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-[#80229a] text-xs bg-white text-slate-700 cursor-pointer shadow-sm"
                 />
               </div>
 
-              {/* Date To */}
+              {/* Date To (Interactive Date Picker) */}
               <div>
-                <label className="block font-semibold text-slate-600 mb-1.5">
-                  Date To
-                </label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block font-semibold text-slate-600 text-xs">
+                    Date To
+                  </label>
+                  {dateTo && (
+                    <button
+                      type="button"
+                      onClick={() => setDateTo('')}
+                      className="text-[10px] text-purple-600 hover:text-rose-500 font-semibold"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
                 <input
-                  type="text"
-                  placeholder="17-10-2026"
+                  type="date"
                   value={dateTo}
                   onChange={(e) => setDateTo(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-[#80229a] text-xs bg-slate-50 font-mono"
+                  onClick={(e) => (e.currentTarget as any).showPicker?.()}
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-[#80229a] text-xs bg-white text-slate-700 cursor-pointer shadow-sm"
                 />
               </div>
             </div>
 
-            {/* Criteria Search Button - placed right-aligned under Date To */}
-            <div className="flex justify-end pt-1">
+            {/* Criteria Search & Reset Buttons */}
+            <div className="flex items-center justify-end gap-2 pt-1">
+              {(incomeHead || dateFrom || dateTo) && (
+                <button
+                  type="button"
+                  onClick={handleResetCriteria}
+                  className="px-3 py-2 border border-slate-200 hover:bg-slate-100 text-slate-600 rounded-xl text-xs font-semibold transition"
+                >
+                  Reset
+                </button>
+              )}
               <button
                 type="submit"
                 disabled={loading}
@@ -503,7 +546,7 @@ export default function SearchIncomeView({ onNavigate }: Props) {
             <div className="p-6 space-y-4">
               <div className="text-center pb-3 border-b border-slate-100">
                 <h2 className="text-sm font-extrabold text-[#80229a] uppercase tracking-wide">
-                  Gangapur Institute of Nursing and Paramedical Sciences
+                  Electro Institute of Nursing and Paramedical Sciences
                 </h2>
                 <p className="text-[10px] text-slate-500">
                   Accounts & Finance Directorate

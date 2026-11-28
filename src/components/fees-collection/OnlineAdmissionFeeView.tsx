@@ -655,7 +655,7 @@ export default function OnlineAdmissionFeeView({ onNavigate }: Props) {
             <div className="p-6 space-y-4 printable-receipt">
               <div className="text-center pb-4 border-b border-slate-100">
                 <h2 className="text-base font-extrabold text-[#80229a] uppercase tracking-wide">
-                  Gangapur Institute of Nursing and Paramedical Sciences
+                  Electro Institute of Nursing and Paramedical Sciences
                 </h2>
                 <p className="text-[11px] text-slate-500 mt-0.5">
                   Affiliated with State Paramedical Faculty & Nursing Council

@@ -985,7 +985,7 @@ export default function AdvancePaymentView({
             <div className="p-4 border border-slate-200 rounded-xl space-y-3 bg-slate-50/50 text-xs">
               <div className="text-center pb-2 border-b border-slate-200">
                 <h4 className="font-bold text-sm text-[#80229a] uppercase">
-                  Gangapur Institute of Nursing and Paramedical Sciences
+                  Electro Institute of Nursing and Paramedical Sciences
                 </h4>
                 <p className="text-[10px] text-slate-500">Official Advance Fees Receipt</p>
               </div>

@@ -31,19 +31,29 @@ const DEFAULT_STAFF = [
 
 const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+function toYYYYMMDD(val: string): string {
+  if (!val) return new Date().toISOString().split('T')[0];
+  if (/^\d{4}-\d{2}-\d{2}$/.test(val)) return val;
+  const parts = val.split('-');
+  if (parts.length === 3 && parts[2].length === 4) {
+    return `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+  }
+  return val;
+}
+
 interface Props {
   onNavigate?: (view: string) => void;
 }
 
 export default function TeacherTimetableView({ onNavigate }: Props) {
   const [staffList, setStaffList] = useState<string[]>(DEFAULT_STAFF);
-  const [selectedStaff, setSelectedStaff] = useState('');
-  const [dateStr, setDateStr] = useState('17-10-2026');
+  const [selectedStaff, setSelectedStaff] = useState('Dr. Pooja Sharma');
+  const [dateStr, setDateStr] = useState(new Date().toISOString().split('T')[0]);
   const [showAllDays, setShowAllDays] = useState(true);
 
   const [slots, setSlots] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false);
+  const [hasSearched, setHasSearched] = useState(true);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   const showToast = (type: 'success' | 'error', message: string) => {
@@ -63,8 +73,9 @@ export default function TeacherTimetableView({ onNavigate }: Props) {
       .catch(() => {});
   }, []);
 
-  const getWeekdayFromDdMmYyyy = (ddmmyyyy: string): string => {
-    const parts = ddmmyyyy.split('-');
+  const getWeekdayFromDdMmYyyy = (dateInput: string): string => {
+    if (!dateInput) return 'Monday';
+    const parts = dateInput.split('-');
     if (parts.length === 3) {
       const d =
         parts[0].length === 4
@@ -75,15 +86,16 @@ export default function TeacherTimetableView({ onNavigate }: Props) {
     return 'Monday';
   };
 
-  const fetchTeacherTimetable = useCallback(async () => {
-    if (!selectedStaff) {
+  const fetchTeacherTimetable = useCallback(async (staffOverride?: string) => {
+    const staff = staffOverride !== undefined ? staffOverride : selectedStaff;
+    if (!staff) {
       showToast('error', 'Please select a Staff member.');
       return;
     }
     setLoading(true);
     setHasSearched(true);
     try {
-      const params = new URLSearchParams({ teacher: selectedStaff });
+      const params = new URLSearchParams({ teacher: staff });
       if (!showAllDays) {
         params.set('day', getWeekdayFromDdMmYyyy(dateStr));
       }
@@ -97,6 +109,11 @@ export default function TeacherTimetableView({ onNavigate }: Props) {
       setLoading(false);
     }
   }, [selectedStaff, dateStr, showAllDays]);
+
+  // Initial load
+  useEffect(() => {
+    fetchTeacherTimetable('Dr. Pooja Sharma');
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -177,11 +194,11 @@ export default function TeacherTimetableView({ onNavigate }: Props) {
                   Date <span className="text-rose-500">*</span>
                 </label>
                 <input
-                  type="text"
-                  value={dateStr}
+                  type="date"
+                  value={toYYYYMMDD(dateStr)}
                   onChange={(e) => setDateStr(e.target.value)}
-                  placeholder="17-10-2026"
-                  className="w-full h-10 px-3 text-sm bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#80229a]/30 focus:border-[#80229a] text-gray-700"
+                  onClick={(e) => (e.currentTarget as any).showPicker?.()}
+                  className="w-full h-10 px-3 text-sm bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#80229a]/30 focus:border-[#80229a] text-gray-700 cursor-pointer shadow-xs"
                 />
               </div>
             </div>

@@ -665,7 +665,7 @@ export default function DemandNoticeView({
             <div className="p-6 space-y-4 text-xs text-slate-700">
               <div className="text-center border-b border-slate-100 pb-3">
                 <h3 className="font-bold text-sm uppercase text-[#80229a]">
-                  GANGAPUR INSTITUTE OF NURSING AND PARAMEDICAL SCIENCES
+                  ELECTRO INSTITUTE OF NURSING AND PARAMEDICAL SCIENCES
                 </h3>
                 <p className="text-[11px] text-slate-400">Accounts & Fee Collection Department</p>
                 <div className="mt-2 inline-block px-3 py-1 bg-rose-50 text-rose-700 font-bold text-xs rounded-full border border-rose-200">

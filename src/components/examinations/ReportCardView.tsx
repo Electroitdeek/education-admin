@@ -429,7 +429,7 @@ export default function ReportCardView({ onNavigate }: Props) {
                 <div className="border-2 border-[#80229a]/30 rounded-xl p-5 space-y-4 text-xs">
                   <div className="text-center border-b border-slate-200 pb-3">
                     <div className="text-base font-bold text-[#80229a]">
-                      GANGAPUR INSTITUTE OF NURSING AND PARAMEDICAL SCIENCES
+                      ELECTRO INSTITUTE OF NURSING AND PARAMEDICAL SCIENCES
                     </div>
                     <div className="text-slate-500 mt-0.5 uppercase font-semibold">
                       {mode === 'term'

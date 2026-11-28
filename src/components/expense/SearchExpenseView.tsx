@@ -33,8 +33,8 @@ export default function SearchExpenseView({ onNavigate }: Props) {
 
   // Filters
   const [expenseHead, setExpenseHead] = useState('');
-  const [dateFrom, setDateFrom] = useState('17-10-2026');
-  const [dateTo, setDateTo] = useState('17-10-2026');
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
   const [searchByExpense, setSearchByExpense] = useState('');
 
   // Table
@@ -85,6 +85,18 @@ export default function SearchExpenseView({ onNavigate }: Props) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleResetCriteria = () => {
+    setExpenseHead('');
+    setDateFrom('');
+    setDateTo('');
+    setLoading(true);
+    fetch(ENDPOINT)
+      .then((res) => res.json())
+      .then((data) => setItems(data.items || []))
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
   };
 
   const handleKeywordSearch = async (e?: React.FormEvent) => {
@@ -206,34 +218,68 @@ export default function SearchExpenseView({ onNavigate }: Props) {
                 </select>
               </div>
 
+              {/* Date From (Interactive Date Picker) */}
               <div>
-                <label className="block font-semibold text-slate-600 mb-1.5">
-                  Date Form
-                </label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block font-semibold text-slate-600 text-xs">
+                    Date From
+                  </label>
+                  {dateFrom && (
+                    <button
+                      type="button"
+                      onClick={() => setDateFrom('')}
+                      className="text-[10px] text-purple-600 hover:text-rose-500 font-semibold"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
                 <input
-                  type="text"
-                  placeholder="17-10-2026"
+                  type="date"
                   value={dateFrom}
                   onChange={(e) => setDateFrom(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-[#80229a] text-xs bg-slate-50 font-mono"
+                  onClick={(e) => (e.currentTarget as any).showPicker?.()}
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-[#80229a] text-xs bg-white text-slate-700 cursor-pointer shadow-sm"
                 />
               </div>
 
+              {/* Date To (Interactive Date Picker) */}
               <div>
-                <label className="block font-semibold text-slate-600 mb-1.5">
-                  Date To
-                </label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block font-semibold text-slate-600 text-xs">
+                    Date To
+                  </label>
+                  {dateTo && (
+                    <button
+                      type="button"
+                      onClick={() => setDateTo('')}
+                      className="text-[10px] text-purple-600 hover:text-rose-500 font-semibold"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
                 <input
-                  type="text"
-                  placeholder="17-10-2026"
+                  type="date"
                   value={dateTo}
                   onChange={(e) => setDateTo(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-[#80229a] text-xs bg-slate-50 font-mono"
+                  onClick={(e) => (e.currentTarget as any).showPicker?.()}
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-[#80229a] text-xs bg-white text-slate-700 cursor-pointer shadow-sm"
                 />
               </div>
             </div>
 
-            <div className="flex justify-end pt-1">
+            {/* Criteria Search & Reset Buttons */}
+            <div className="flex items-center justify-end gap-2 pt-1">
+              {(expenseHead || dateFrom || dateTo) && (
+                <button
+                  type="button"
+                  onClick={handleResetCriteria}
+                  className="px-3 py-2 border border-slate-200 hover:bg-slate-100 text-slate-600 rounded-xl text-xs font-semibold transition"
+                >
+                  Reset
+                </button>
+              )}
               <button
                 type="submit"
                 disabled={loading}

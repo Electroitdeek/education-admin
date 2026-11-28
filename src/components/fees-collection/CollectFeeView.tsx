@@ -945,7 +945,7 @@ export default function CollectFeeView({
             <div className="p-6 space-y-4 text-xs text-slate-700">
               <div className="text-center pb-3 border-b border-dashed border-slate-200">
                 <h4 className="text-sm font-bold text-slate-800 tracking-wide uppercase">
-                  Gangapur Institute of Nursing & Paramedical Sciences
+                  Electro Institute of Nursing & Paramedical Sciences
                 </h4>
                 <p className="text-[11px] text-slate-500">Affiliated to RUHS & Rajasthan Nursing Council</p>
                 <div className="inline-block mt-2 px-3.5 py-1 bg-purple-50 text-[#80229a] border border-purple-200 rounded-full font-mono font-bold text-xs">

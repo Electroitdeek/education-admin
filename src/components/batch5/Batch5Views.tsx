@@ -529,6 +529,112 @@ export function Batch5ViewRenderer({ activeView }: { activeView: string }) {
         />
       );
 
+    // =========================================================================
+    // 3. SYSTEM SETTING — Key-Value Entries (11)
+    // =========================================================================
+    case 'set-general':
+    case 'set-meta-data':
+    case 'set-session':
+    case 'set-institute-times':
+    case 'set-referral':
+    case 'set-communication':
+    case 'set-biometric':
+    case 'set-payment':
+    case 'set-firebase':
+    case 'set-front-cms':
+    case 'set-configurations': {
+      const categoryMap: Record<string, string> = {
+        'set-general': 'General Setting',
+        'set-meta-data': 'Meta Data',
+        'set-session': 'Session Setting',
+        'set-institute-times': 'Institute Times',
+        'set-referral': 'Referral Setting',
+        'set-communication': 'Communication Setting',
+        'set-biometric': 'Biometric Setup',
+        'set-payment': 'Payment Setting',
+        'set-firebase': 'Firebase Details',
+        'set-front-cms': 'Front CMS Setting',
+        'set-configurations': 'Configurations',
+      };
+      const cat = categoryMap[activeView] || 'General Setting';
+      return (
+        <ErpCrudView
+          key={activeView}
+          title={cat}
+          breadcrumb={`System Setting / ${cat}`}
+          endpoint="system-setting/entries"
+          layout="split"
+          fixedFilters={{ category: cat }}
+          transformPayload={(data) => ({ ...data, category: cat })}
+          fields={[
+            { name: 'settingKey', label: 'Setting Name / Key', required: true },
+            { name: 'settingValue', label: 'Setting Value', required: true },
+            { name: 'description', label: 'Description', type: 'textarea' },
+          ]}
+          columns={[
+            { key: 'settingKey', label: 'Setting Key' },
+            { key: 'settingValue', label: 'Setting Value' },
+            { key: 'description', label: 'Description' },
+          ]}
+        />
+      );
+    }
+
+    // =========================================================================
+    // 4. SYSTEM SETTING — Master Records (12)
+    // =========================================================================
+    case 'set-custom-columns':
+    case 'set-document-master':
+    case 'set-language':
+    case 'set-template':
+    case 'set-staff-slots':
+    case 'set-student-delete':
+    case 'set-remove-session':
+    case 'set-backup':
+    case 'set-disabled-status':
+    case 'set-users':
+    case 'set-student-privilege':
+    case 'set-staff-privilege': {
+      const typeMap: Record<string, string> = {
+        'set-custom-columns': 'Custom Columns',
+        'set-document-master': 'Document Master',
+        'set-language': 'Language',
+        'set-template': 'Template Setting',
+        'set-staff-slots': 'Staff Time Slots',
+        'set-student-delete': 'Student Delete Log',
+        'set-remove-session': 'Remove Student Session',
+        'set-backup': 'Backup / Restore',
+        'set-disabled-status': 'Student Disabled Status',
+        'set-users': 'Users',
+        'set-student-privilege': 'Student Privilege',
+        'set-staff-privilege': 'Staff Privilege',
+      };
+      const rType = typeMap[activeView] || 'Master Record';
+      return (
+        <ErpCrudView
+          key={activeView}
+          title={rType}
+          breadcrumb={`System Setting / ${rType}`}
+          endpoint="system-setting/records"
+          layout="modal"
+          fixedFilters={{ recordType: rType }}
+          transformPayload={(data) => ({ ...data, recordType: rType })}
+          fields={[
+            { name: 'name', label: `${rType} Name`, required: true },
+            { name: 'code', label: 'Code / Reference' },
+            { name: 'description', label: 'Description', type: 'textarea' },
+            { name: 'isActive', label: 'Active Status', type: 'checkbox', defaultValue: true },
+          ]}
+          columns={[
+            { key: 'name', label: 'Name' },
+            { key: 'code', label: 'Code' },
+            { key: 'description', label: 'Description' },
+            { key: 'isActive', label: 'Status', render: (row) => <ActiveBadge value={row.isActive} /> },
+          ]}
+        />
+      );
+    }
+
     default:
       return null;
   }
